@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "SecondOrderAllPass.h"
+#include "NSCphaser.h"
 
 //==============================================================================
 /**
@@ -55,8 +56,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-
-    SecondOrderAllPass myFilter;
+    NSCPhaser phaser;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Lavno_PhaserAudioProcessor)
 };

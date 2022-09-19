@@ -97,10 +97,7 @@ void Lavno_PhaserAudioProcessor::prepareToPlay (double sampleRate, int samplesPe
     spec.sampleRate = sampleRate;
     spec.maximumBlockSize = samplesPerBlock;
     spec.numChannels = getNumInputChannels();
-    auto filterParams = myFilter.getParameters();
-    filterParams.mfc = 20000;
-    filterParams.mQ = 5;
-    myFilter.prepare(spec, filterParams);
+    phaser.prepare(spec);
 }
 
 void Lavno_PhaserAudioProcessor::releaseResources()
@@ -145,8 +142,8 @@ void Lavno_PhaserAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         buffer.clear (i, 0, buffer.getNumSamples());
 
     juce::dsp::AudioBlock<float> block(buffer);
-
-    myFilter.processBlock(block);
+    phaser.processBuffer(buffer);
+    
 }
 
 //==============================================================================

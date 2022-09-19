@@ -15,6 +15,10 @@
             file="Source/SecondOrderAllPass.cpp"/>
       <FILE id="fCNc9n" name="SecondOrderAllPass.h" compile="0" resource="0"
             file="Source/SecondOrderAllPass.h"/>
+      <FILE id="gX4YKG" name="NSCphaser.cpp" compile="1" resource="0" file="Source/NSCphaser.cpp"/>
+      <FILE id="yUATNv" name="NSCphaser.h" compile="0" resource="0" file="Source/NSCphaser.h"/>
+      <FILE id="gteeMQ" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
+      <FILE id="KQPESD" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

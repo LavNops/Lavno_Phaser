@@ -29,9 +29,12 @@ public:
     ~SecondOrderAllPass();
     void prepare(const juce::dsp::ProcessSpec spec, const AllPassFilterParameters& parameters);
     void processBlock(const juce::dsp::ProcessContextReplacing<float>& context);
+    float processSample(float& sample, int& channel);
     void setParameters(const AllPassFilterParameters& parameters);
     AllPassFilterParameters getParameters();
     void updateCoefficients();
+    float getDelayedComponent(const int& channel);
+    float getG_Value(const int& channel);
 
 private:
 
