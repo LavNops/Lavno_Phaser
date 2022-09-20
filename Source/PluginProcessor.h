@@ -12,10 +12,15 @@
 #include "SecondOrderAllPass.h"
 #include "NSCphaser.h"
 
+
+PhaserParameters getRawValueFromApvts(const juce::AudioProcessorValueTreeState& apvts);
+
+
+
 //==============================================================================
 /**
 */
-class Lavno_PhaserAudioProcessor  : public juce::AudioProcessor
+class Lavno_PhaserAudioProcessor  : public juce::AudioProcessor, juce::AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -55,9 +60,15 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    
+
+    static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
+    juce::AudioProcessorValueTreeState apvts{ *this,nullptr,"PARAMETERS",createParameterLayout()};
 private:
     NSCPhaser phaser;
     
+    void parameterChanged(const juce::String& parameterID, float newValue) override;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Lavno_PhaserAudioProcessor)
 };

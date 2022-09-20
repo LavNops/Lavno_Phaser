@@ -22,11 +22,11 @@ SecondOrderAllPass::~SecondOrderAllPass()
 
 }
 
-void SecondOrderAllPass::prepare(const juce::dsp::ProcessSpec spec, const AllPassFilterParameters& parameters)
+void SecondOrderAllPass::prepare(const juce::dsp::ProcessSpec spec)
 {
     mSampleRate = spec.sampleRate;
     mNumOfChannel = spec.numChannels;
-    setParameters(parameters);
+    
 
 
 }

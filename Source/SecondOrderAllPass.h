@@ -27,7 +27,7 @@ class SecondOrderAllPass
 public:
     SecondOrderAllPass();
     ~SecondOrderAllPass();
-    void prepare(const juce::dsp::ProcessSpec spec, const AllPassFilterParameters& parameters);
+    void prepare(const juce::dsp::ProcessSpec spec);
     void processBlock(const juce::dsp::ProcessContextReplacing<float>& context);
     float processSample(float& sample, int& channel);
     void setParameters(const AllPassFilterParameters& parameters);

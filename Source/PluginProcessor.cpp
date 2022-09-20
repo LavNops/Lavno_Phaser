@@ -22,10 +22,22 @@ Lavno_PhaserAudioProcessor::Lavno_PhaserAudioProcessor()
                        )
 #endif
 {
+    apvts.addParameterListener("Rate", this);
+    apvts.addParameterListener("Depth", this);
+    apvts.addParameterListener("Feed", this);
+    apvts.addParameterListener("Mix", this);
+    apvts.addParameterListener("LFOType", this);
+    
+
 }
 
 Lavno_PhaserAudioProcessor::~Lavno_PhaserAudioProcessor()
 {
+    apvts.removeParameterListener("Rate", this);
+    apvts.removeParameterListener("Depth", this);
+    apvts.removeParameterListener("Feed", this);
+    apvts.removeParameterListener("Mix", this);
+    apvts.removeParameterListener("LFOType", this);
 }
 
 //==============================================================================
@@ -144,6 +156,7 @@ void Lavno_PhaserAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
     juce::dsp::AudioBlock<float> block(buffer);
     phaser.processBuffer(buffer);
     
+    
 }
 
 //==============================================================================
@@ -154,7 +167,8 @@ bool Lavno_PhaserAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* Lavno_PhaserAudioProcessor::createEditor()
 {
-    return new Lavno_PhaserAudioProcessorEditor (*this);
+    //return new Lavno_PhaserAudioProcessorEditor (*this);
+    return new juce::GenericAudioProcessorEditor(*this);
 }
 
 //==============================================================================
@@ -176,4 +190,45 @@ void Lavno_PhaserAudioProcessor::setStateInformation (const void* data, int size
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new Lavno_PhaserAudioProcessor();
+    
+}
+
+
+juce::AudioProcessorValueTreeState::ParameterLayout Lavno_PhaserAudioProcessor::createParameterLayout()
+{
+
+    juce::StringArray LFOType = { "Sine","Saw","Triangle" };
+    juce::String LFOLabel = { "LFO Type" };
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Rate", "Rate", juce::NormalisableRange<float>(0.f, 20.f, 0.01f), 2.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Depth", "Depth", juce::NormalisableRange<float>(0.f, 100.f, 1.f), 20.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Feed", "Feed", juce::NormalisableRange<float>(0.f, 100.f, 1.f), 50.f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("Mix", "Mix", juce::NormalisableRange<float>(0.f, 100.f, 1.f), 100.f));
+
+    layout.add(std::make_unique<juce::AudioParameterChoice>("LFOType", 
+                                                            "LFOType", 
+                                                            LFOType, 0, 
+                                                            LFOLabel, nullptr, nullptr));
+
+    return layout;
+}
+   
+
+PhaserParameters getRawValueFromApvts(const juce::AudioProcessorValueTreeState& apvts)
+{
+    PhaserParameters params;
+    params.phs_Rate = apvts.getRawParameterValue("Rate")->load();
+    params.phs_Depth = apvts.getRawParameterValue("Depth")->load();
+    params.phs_Feed = apvts.getRawParameterValue("Feed")->load();
+    params.phs_mix = apvts.getRawParameterValue("Mix")->load();
+    params.lfoParams.mWaveform = static_cast<WaveformType>(apvts.getRawParameterValue("LFOType")->load());
+    return params;
+}
+
+
+void Lavno_PhaserAudioProcessor::parameterChanged(const juce::String& parameterID, float newValue)
+{
+    auto updatedParams=getRawValueFromApvts(apvts);
+    phaser.setPhaserParameters(updatedParams);
+   
 }
